@@ -2435,7 +2435,7 @@ let UFOBossHealth = 0
 let Daddo: Sprite = null
 let currentLevel = 0
 music.setVolume(20)
-currentLevel = 4
+currentLevel = 0
 info.setLife(5)
 Daddo = sprites.create(img`
     . . . . . . . . . . . . . 
@@ -2766,5 +2766,18 @@ forever(function () {
             music.playTone(440, music.beat(BeatFraction.Quarter))
             music.playTone(523, music.beat(BeatFraction.Quarter))
         }
+    }
+})
+forever(function () {
+    if (controller.right.isPressed() && (Daddo.vy == 0 && Daddo.vx != 0)) {
+        music.playTone(147, music.beat(BeatFraction.Sixteenth))
+        music.playTone(131, music.beat(BeatFraction.Sixteenth))
+        pause(200)
+    } else if (controller.left.isPressed() && Daddo.vy == 0 && Daddo.vx != 0) {
+        music.playTone(147, music.beat(BeatFraction.Sixteenth))
+        music.playTone(131, music.beat(BeatFraction.Sixteenth))
+        pause(200)
+    } else {
+    	
     }
 })
