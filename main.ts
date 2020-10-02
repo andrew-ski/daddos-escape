@@ -258,10 +258,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Spawn, function (sprite, otherSp
     200,
     true
     )
-    if (randint(1, 2) == 1) {
+    if (randint(1, 4) == 1) {
+        UFO.setPosition(Daddo.x + 60, Daddo.y + 60)
+    } else if (randint(1, 4) == 2) {
         UFO.setPosition(Daddo.x + 60, Daddo.y + -60)
+    } else if (randint(1, 4) == 3) {
+        UFO.setPosition(Daddo.x + -60, Daddo.y + 60)
     } else {
-        UFO.setPosition(Daddo.x - 60, Daddo.y - -60)
+        UFO.setPosition(Daddo.x + -60, Daddo.y + -60)
     }
     UFO.follow(Daddo)
 })
@@ -553,7 +557,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart, function (sprite, otherSp
         info.changeLifeBy(1)
         music.playMelody("F A C5 - - - - - ", 499)
     }
-    HPup.destroy()
+    otherSprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.B4, function (sprite, otherSprite) {
     animation.runImageAnimation(
@@ -3893,7 +3897,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
                 . . f 3 f . . 
                 . . . f . . . 
                 `, SpriteKind.Heart)
-            HPup.setPosition(Daddo.x + 60, Daddo.y + -60)
+            HPup.setPosition(Daddo.x, Daddo.y)
             HPup.follow(Daddo)
         }
     } else {
