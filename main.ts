@@ -1478,7 +1478,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart, function (sprite, otherSp
     otherSprite.destroy()
 })
 function Level1 () {
-    info.setLife(5)
     for (let value of sprites.allOfKind(SpriteKind.Indicator)) {
         value.destroy()
     }
@@ -1504,7 +1503,7 @@ function Level1 () {
         ......................................................................
         ......................................................................
         ......................................................................
-        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile4,myTiles.tile7,myTiles.tile8,myTiles.tile9,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile14,myTiles.tile5,myTiles.tile6,myTiles.tile16,myTiles.tile17,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile21,myTiles.tile22,myTiles.tile23,myTiles.tile24,myTiles.tile25], TileScale.Sixteen))
+        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile4,myTiles.tile7,myTiles.tile8,myTiles.tile9,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13], TileScale.Sixteen))
     SpawnCoins()
     SpawnSpawns()
 }
@@ -3969,6 +3968,7 @@ let L4BL: Sprite = null
 let L4BLP: Sprite = null
 let UFOLaser: Sprite = null
 let UFOLaserPosition: Sprite = null
+let LookingLeft = false
 let Rocket: Sprite = null
 let Meteor: Sprite = null
 let C1Cannon: Sprite = null
@@ -3997,206 +3997,192 @@ let currentLevel = 0
 music.setVolume(20)
 currentLevel = 0
 Daddo = sprites.create(img`
-    . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . 
-    . . . . . . . . . e e e . 
-    . . . . . . . . e e e e e 
-    . . . . . . . . e e e d . 
-    . . . . . . . . . e e e e 
-    . . . . . . . . . . d e e 
-    . . . . . . . . . . 6 . e 
-    . . . . . . . . . . 6 . . 
-    . . . . . . . . . . 6 6 d 
-    . . . . . . . . . . e . . 
-    . . . . . . . . . . 8 . . 
-    . . . . . . . . . . 8 . . 
-    . . . . . . . . . . 8 . . 
-    . . . . . . . . . . e . . 
-    . . . . . . . . . . e e . 
+    . e e e . 
+    e e e e e 
+    e e e d . 
+    . e e e e 
+    . . d e e 
+    . . 6 . e 
+    . . 6 . . 
+    . . 6 6 d 
+    . . e . . 
+    . . 8 . . 
+    . . 8 . . 
+    . . 8 . . 
+    . . e . . 
+    . . e e . 
     `, SpriteKind.Player)
 controller.moveSprite(Daddo, 85, 0)
 Daddo.setFlag(SpriteFlag.BounceOnWall, false)
+info.setLife(5)
 startLevel()
 game.onUpdate(function () {
     Daddo.setImage(img`
-        . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . 
-        . . . . . . . . . e e e . 
-        . . . . . . . . e e e e e 
-        . . . . . . . . e e e d . 
-        . . . . . . . . . e e e e 
-        . . . . . . . . . . d e e 
-        . . . . . . . . . . 6 . e 
-        . . . . . . . . . . 6 . . 
-        . . . . . . . . . . 6 6 d 
-        . . . . . . . . . . 6 . . 
-        . . . . . . . . . . 8 . . 
-        . . . . . . . . . . 8 . . 
-        . . . . . . . . . . 8 . . 
-        . . . . . . . . . . 8 . . 
-        . . . . . . . . . . e e . 
+        . e e e . 
+        e e e e e 
+        e e e d . 
+        . e e e e 
+        . . d e e 
+        . . 6 . e 
+        . . 6 . . 
+        . . 6 6 d 
+        . . 6 . . 
+        . . 8 . . 
+        . . 8 . . 
+        . . 8 . . 
+        . . 8 . . 
+        . . e e . 
         `)
     if (Daddo.vy < 0) {
         Daddo.setImage(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . e e e 
-            . . . . . . . . . . . . e e e e 
-            . . . . . . . . . . . . e e d d 
-            . . . . . . . . . . . . . e e e 
-            . . . . . . . . . . . 6 6 6 e e 
-            . . . . . . . . . . . d 6 6 . e 
-            . . . . . . . . . . . . 6 . . . 
-            . . . . . . . . . . . . 8 . . e 
-            . . . . . . . . . . . . 8 8 8 e 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . e e . 
+            . . e e e . 
+            . e e e e . 
+            . e e d d . 
+            . . e e e . 
+            6 6 6 e e . 
+            d 6 6 . e . 
+            . 6 . . . . 
+            . 8 . . e . 
+            . 8 8 8 e . 
+            . . 8 . . . 
+            . . e e . . 
+            . . . . . . 
+            . . . . . . 
+            . . . . . . 
             `)
     } else if (Daddo.vy > 0) {
         Daddo.setImage(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . e e . . . 
-            . . . . . . . . . . e e e e . . 
-            . . . . . . . . . d e d d e d . 
-            . . . . . . . . . 6 e e e e 6 . 
-            . . . . . . . . . 6 6 e e 6 6 . 
-            . . . . . . . . . . 6 e e 6 . . 
-            . . . . . . . . . . . 6 6 . . . 
-            . . . . . . . . . . . 6 6 . . . 
-            . . . . . . . . . . . 8 8 . . . 
-            . . . . . . . . . 8 8 8 8 8 8 . 
-            . . . . . . . . . 8 . . . . 8 . 
-            . . . . . . . . e e . . . . e e 
+            . . . e e . . . 
+            . . e e e e . . 
+            . d e d d e d . 
+            . 6 e e e e 6 . 
+            . 6 6 e e 6 6 . 
+            . . 6 e e 6 . . 
+            . . . 6 6 . . . 
+            . . . 6 6 . . . 
+            . . . 8 8 . . . 
+            . 8 8 8 8 8 8 . 
+            . 8 . . . . 8 . 
+            e e . . . . e e 
+            . . . . . . . . 
+            . . . . . . . . 
             `)
     } else if (Daddo.vx % 2 == 0) {
         Daddo.setImage(img`
-            . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . 
-            . . . . . . . . . e e e . 
-            . . . . . . . . e e e e e 
-            . . . . . . . . e e e d . 
-            . . . . . . . . . e e e e 
-            . . . . . . . . . . d e e 
-            . . . . . . . . . . 6 . e 
-            . . . . . . . . . . 6 . . 
-            . . . . . . . . . . 6 6 d 
-            . . . . . . . . . . 6 . . 
-            . . . . . . . . . . 8 . . 
-            . . . . . . . . . . 8 . . 
-            . . . . . . . . . . 8 . . 
-            . . . . . . . . . . 8 . . 
-            . . . . . . . . . . e e . 
+            . e e e . 
+            e e e e e 
+            e e e d . 
+            . e e e e 
+            . . d e e 
+            . . 6 . e 
+            . . 6 . . 
+            . . 6 6 d 
+            . . 6 . . 
+            . . 8 . . 
+            . . 8 . . 
+            . . 8 . . 
+            . . 8 . . 
+            . . e e . 
             `)
         animation.runImageAnimation(
         Daddo,
         [img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . e e e . 
-            . . . . . . . . . . . e e e e e 
-            . . . . . . . . . . . e e e d . 
-            . . . . . . . . . . . . e e e e 
-            . . . . . . . . . . . . . d e e 
-            . . . . . . . . . . . . . 6 . e 
-            . . . . . . . . . . . . 6 6 . . 
-            . . . . . . . . . . . . d 6 6 d 
-            . . . . . . . . . . . . . e . . 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . e e . 
+            . e e e . 
+            e e e e e 
+            e e e d . 
+            . e e e e 
+            . . d e e 
+            . . 6 . e 
+            . 6 6 . . 
+            . d 6 6 d 
+            . . e . . 
+            . . 8 . . 
+            . . 8 . . 
+            . . 8 . . 
+            . . 8 . . 
+            . . e e . 
             `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . e e e . 
-            . . . . . . . . . . . e e e e e 
-            . . . . . . . . . . . e e e d . 
-            . . . . . . . . . . . . e e e e 
-            . . . . . . . . . . . . . d e e 
-            . . . . . . . . . . . . . 6 . e 
-            . . . . . . . . . . . 6 6 6 6 . 
-            . . . . . . . . . . . d . 6 6 d 
-            . . . . . . . . . . . . . e . . 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . 8 . 8 . 
-            . . . . . . . . . . . 8 . . 8 e 
-            . . . . . . . . . . . e e . e . 
+            . e e e . 
+            e e e e e 
+            e e e d . 
+            . e e e e 
+            . . d e e 
+            . . 6 . e 
+            6 6 6 6 . 
+            d . 6 6 d 
+            . . e . . 
+            . . 8 . . 
+            . . 8 . . 
+            . 8 . 8 . 
+            8 . . 8 e 
+            e e . e . 
             `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . e e e . 
-            . . . . . . . . . . . e e e e e 
-            . . . . . . . . . . . e e e d . 
-            . . . . . . . . . . . . e e e e 
-            . . . . . . . . . . . . . d e e 
-            . . . . . . . . . . . . . 6 . e 
-            . . . . . . . . . . . . 6 6 . . 
-            . . . . . . . . . . . . d 6 6 d 
-            . . . . . . . . . . . . . e . . 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . 8 . . 
-            . . . . . . . . . . . . . 8 8 . 
-            . . . . . . . . . . . . 8 . 8 . 
-            . . . . . . . . . . . . e . e e 
+            . e e e . 
+            e e e e e 
+            e e e d . 
+            . e e e e 
+            . . d e e 
+            . . 6 . e 
+            . 6 6 . . 
+            . d 6 6 d 
+            . . e . . 
+            . . 8 . . 
+            . . 8 . . 
+            . . 8 8 . 
+            . 8 . 8 . 
+            . e . e e 
             `],
         200,
         true
         )
     } else {
         Daddo.setImage(img`
-            . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . 
-            . . . . . . . . . e e e . 
-            . . . . . . . . e e e e e 
-            . . . . . . . . e e e d . 
-            . . . . . . . . . e e e e 
-            . . . . . . . . . . d e e 
-            . . . . . . . . . . 6 . e 
-            . . . . . . . . . . 6 . . 
-            . . . . . . . . . . 6 6 d 
-            . . . . . . . . . . 6 . . 
-            . . . . . . . . . . 8 . . 
-            . . . . . . . . . . 8 . . 
-            . . . . . . . . . 8 . 8 . 
-            . . . . . . . . 8 . . 8 e 
-            . . . . . . . . e e . e . 
+            . e e e . 
+            e e e e e 
+            e e e d . 
+            . e e e e 
+            . . d e e 
+            . . 6 . e 
+            . . 6 . . 
+            . . 6 6 d 
+            . . 6 . . 
+            . . 8 . . 
+            . . 8 . . 
+            . 8 . 8 . 
+            8 . . 8 e 
+            e e . e . 
             `)
     }
     if ((Daddo.isHittingTile(CollisionDirection.Left) || Daddo.isHittingTile(CollisionDirection.Right)) && Daddo.vy >= 0) {
         Daddo.vy = 0
         Daddo.ay = 0
         Daddo.setImage(img`
-            . . . . . . . . . . . . . . . d 
-            . . . . . . . . . . . . . . . 6 
-            . . . . . . . . . . . . . e e e 
-            . . . . . . . . . . . . e e e e 
-            . . . . . . . . . . . . e e e d 
-            . . . . . . . . . . . . . e e e 
-            . . . . . . . . . . . . . . d e 
-            . . . . . . . . . . . . . . 6 d 
-            . . . . . . . . . . . . . . 6 6 
-            . . . . . . . . . . . . . . . 6 
-            . . . . . . . . . . . . . . . 6 
-            . . . . . . . . . . . . . . . 8 
-            . . . . . . . . . . . . . . . 8 
-            . . . . . . . . . . . . . . e 8 
-            . . . . . . . . . . . . . . . e 
-            . . . . . . . . . . . . . . . . 
+            . . . d . 
+            . . . 6 . 
+            . e e e . 
+            e e e e . 
+            e e e d . 
+            . e e e . 
+            . . d e . 
+            . . 6 d . 
+            . . 6 6 . 
+            . . . 6 . 
+            . . . 6 . 
+            . . . 8 . 
+            . . . 8 . 
+            . . e 8 . 
+            . . . e . 
             `)
     } else {
         Daddo.ay = 300
     }
-    if (Daddo.vx < 0 || Daddo.isHittingTile(CollisionDirection.Left)) {
+    if (LookingLeft == true || (Daddo.vx < 0 || Daddo.isHittingTile(CollisionDirection.Left))) {
         Daddo.image.flipX()
         Daddo.setImage(Daddo.image)
+        LookingLeft = true
+    }
+    if (Daddo.vx > 0) {
+        LookingLeft = false
     }
 })
 game.onUpdateInterval(1000, function () {
